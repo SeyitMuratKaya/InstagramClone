@@ -59,11 +59,15 @@ struct ProfileView: View {
                             }
                         }.padding([.leading])
                     }
-                    Button("Profile Details"){}
-                        .padding(2)
-                        .frame(maxWidth:.infinity)
-                        .background(.thickMaterial)
-                        .cornerRadius(10)
+                    Button{
+                        
+                    }label: {
+                        Text("Profile Details")
+                            .padding(2)
+                            .frame(maxWidth:.infinity)
+                            .background(.thickMaterial)
+                            .cornerRadius(10)
+                    }
                 }
             }
             .padding([.top,.trailing])
@@ -84,9 +88,9 @@ struct ProfileView: View {
             }
             .pickerStyle(.segmented)
             TabView(selection: $profileSelection){
-                PhotosView()
+                PhotosView(imageURLs: viewModel.images)
                     .tag(0)
-                PhotosView()
+                Text("Placeholder")
                     .tag(1)
             }
             .edgesIgnoringSafeArea(.bottom)
@@ -106,18 +110,32 @@ struct ProfileView: View {
 
 struct PhotosView: View {
     let data = (1...99).map { "Item \($0)" }
-    
     let columns: [GridItem] = Array(repeating: .init(.flexible(),spacing:1), count: 3)
+    
+    var imageURLs: [String]
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns,spacing: 1) {
-                ForEach(data, id: \.self) { item in
-                    Rectangle()
-                        .aspectRatio(contentMode: .fit)
-                        .overlay{
-                            Text(item).foregroundColor(.white)
+                ForEach(imageURLs.reversed(), id: \.self) { imageURL in
+                    Color.clear.overlay(
+                        AsyncImage(url: URL(string: imageURL)) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                            default:
+                                ZStack{
+                                    Color.gray
+                                    ProgressView()
+                                }
+                            }
                         }
+                    )
+                    .frame(maxWidth: .infinity)
+                    .aspectRatio(1, contentMode: .fit)
+                    .clipped()
                 }
             }
         }

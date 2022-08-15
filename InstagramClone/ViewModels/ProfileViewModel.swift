@@ -10,9 +10,27 @@ import Foundation
 class ProfileViewModel: ObservableObject{
     
     @Published var userName = ""
+    @Published var images: [String] = []
     
     init(){
         fetchProfile()
+        updateProfile()
+    }
+    
+    private func updateProfile(){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot else {
+              print("Error fetching document: \(error!)")
+              return
+            }
+            guard let data = document.data() else {
+              print("Document data was empty.")
+              return
+            }
+            self.images = data["images"] as? [String] ?? []
+          }
     }
     
     private func fetchProfile(){
@@ -25,6 +43,7 @@ class ProfileViewModel: ObservableObject{
             if let document = document, document.exists {
                 let data = document.data()
                 self.userName = data?["username"] as? String ?? ""
+                self.images = data?["images"] as? [String] ?? []
                 
             } else {
                 print("Document does not exist")

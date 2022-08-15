@@ -40,12 +40,12 @@ struct AuthView: View {
                         }
                     }label: {
                         Text(authViewModel.isNewUser ? "Sign Up" : "Login")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth:.infinity)
+                            .background(.blue)
+                            .cornerRadius(25)
                     }
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth:.infinity)
-                    .background(.blue)
-                    .cornerRadius(25)
                 }
                 .padding()
             }
