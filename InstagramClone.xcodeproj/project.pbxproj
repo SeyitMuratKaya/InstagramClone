@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F2C35E728AA417A00F708D1 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */; };
+		2F2C35E928AA422600F708D1 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */; };
+		2F8CBB4328A4D5C600B6C329 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F8CBB4228A4D5C600B6C329 /* GoogleService-Info.plist */; };
+		2F8CBB4628A4D78C00B6C329 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2F8CBB4528A4D78C00B6C329 /* FirebaseAuth */; };
+		2F8CBB4828A4D78C00B6C329 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2F8CBB4728A4D78C00B6C329 /* FirebaseFirestore */; };
+		2F8CBB4A28A4D78C00B6C329 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F8CBB4928A4D78C00B6C329 /* FirebaseStorage */; };
+		2F8CBB4C28A4DD5F00B6C329 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CBB4B28A4DD5F00B6C329 /* AuthView.swift */; };
+		2F8CBB4E28A518EC00B6C329 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CBB4D28A518EC00B6C329 /* ProfileView.swift */; };
+		2FA1D68028AA26690067FB5C /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA1D67F28AA26690067FB5C /* ImagePicker.swift */; };
+		2FA1D68228AA26850067FB5C /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA1D68128AA26850067FB5C /* ImagePickerView.swift */; };
+		2FEDF6F128A67117000EB132 /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEDF6F028A67117000EB132 /* ContainerView.swift */; };
 		2FF803D728A41EEA000B2B54 /* InstagramCloneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF803D628A41EEA000B2B54 /* InstagramCloneApp.swift */; };
 		2FF803D928A41EEA000B2B54 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF803D828A41EEA000B2B54 /* ContentView.swift */; };
 		2FF803DB28A41EED000B2B54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FF803DA28A41EED000B2B54 /* Assets.xcassets */; };
@@ -14,6 +25,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		2F8CBB4228A4D5C600B6C329 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2F8CBB4B28A4DD5F00B6C329 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		2F8CBB4D28A518EC00B6C329 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		2FA1D67F28AA26690067FB5C /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		2FA1D68128AA26850067FB5C /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		2FEDF6F028A67117000EB132 /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		2FF803D328A41EEA000B2B54 /* InstagramClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstagramClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FF803D628A41EEA000B2B54 /* InstagramCloneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramCloneApp.swift; sourceTree = "<group>"; };
 		2FF803D828A41EEA000B2B54 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -26,12 +45,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F8CBB4628A4D78C00B6C329 /* FirebaseAuth in Frameworks */,
+				2F8CBB4828A4D78C00B6C329 /* FirebaseFirestore in Frameworks */,
+				2F8CBB4A28A4D78C00B6C329 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F2C35E428AA415200F708D1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2FF803D828A41EEA000B2B54 /* ContentView.swift */,
+				2FEDF6F028A67117000EB132 /* ContainerView.swift */,
+				2F8CBB4B28A4DD5F00B6C329 /* AuthView.swift */,
+				2F8CBB4D28A518EC00B6C329 /* ProfileView.swift */,
+				2FA1D68128AA26850067FB5C /* ImagePickerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2F2C35E528AA415D00F708D1 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */,
+				2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		2FF803CA28A41EEA000B2B54 = {
 			isa = PBXGroup;
 			children = (
@@ -52,8 +95,11 @@
 			isa = PBXGroup;
 			children = (
 				2FF803D628A41EEA000B2B54 /* InstagramCloneApp.swift */,
-				2FF803D828A41EEA000B2B54 /* ContentView.swift */,
+				2F2C35E528AA415D00F708D1 /* ViewModels */,
+				2F2C35E428AA415200F708D1 /* Views */,
+				2FA1D67F28AA26690067FB5C /* ImagePicker.swift */,
 				2FF803DA28A41EED000B2B54 /* Assets.xcassets */,
+				2F8CBB4228A4D5C600B6C329 /* GoogleService-Info.plist */,
 				2FF803DC28A41EED000B2B54 /* Preview Content */,
 			);
 			path = InstagramClone;
@@ -83,6 +129,11 @@
 			dependencies = (
 			);
 			name = InstagramClone;
+			packageProductDependencies = (
+				2F8CBB4528A4D78C00B6C329 /* FirebaseAuth */,
+				2F8CBB4728A4D78C00B6C329 /* FirebaseFirestore */,
+				2F8CBB4928A4D78C00B6C329 /* FirebaseStorage */,
+			);
 			productName = InstagramClone;
 			productReference = 2FF803D328A41EEA000B2B54 /* InstagramClone.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +162,9 @@
 				Base,
 			);
 			mainGroup = 2FF803CA28A41EEA000B2B54;
+			packageReferences = (
+				2F8CBB4428A4D78C00B6C329 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 2FF803D428A41EEA000B2B54 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +181,7 @@
 			files = (
 				2FF803DE28A41EED000B2B54 /* Preview Assets.xcassets in Resources */,
 				2FF803DB28A41EED000B2B54 /* Assets.xcassets in Resources */,
+				2F8CBB4328A4D5C600B6C329 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +192,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FEDF6F128A67117000EB132 /* ContainerView.swift in Sources */,
+				2F8CBB4E28A518EC00B6C329 /* ProfileView.swift in Sources */,
 				2FF803D928A41EEA000B2B54 /* ContentView.swift in Sources */,
+				2F2C35E928AA422600F708D1 /* ProfileViewModel.swift in Sources */,
+				2FA1D68028AA26690067FB5C /* ImagePicker.swift in Sources */,
+				2F2C35E728AA417A00F708D1 /* AuthViewModel.swift in Sources */,
+				2FA1D68228AA26850067FB5C /* ImagePickerView.swift in Sources */,
 				2FF803D728A41EEA000B2B54 /* InstagramCloneApp.swift in Sources */,
+				2F8CBB4C28A4DD5F00B6C329 /* AuthView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +332,7 @@
 				DEVELOPMENT_TEAM = 253GAU5X5Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "InstagramClone needs access to your camera to take photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +362,7 @@
 				DEVELOPMENT_TEAM = 253GAU5X5Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "InstagramClone needs access to your camera to take photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -339,6 +403,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2F8CBB4428A4D78C00B6C329 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2F8CBB4528A4D78C00B6C329 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F8CBB4428A4D78C00B6C329 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		2F8CBB4728A4D78C00B6C329 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F8CBB4428A4D78C00B6C329 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		2F8CBB4928A4D78C00B6C329 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F8CBB4428A4D78C00B6C329 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2FF803CB28A41EEA000B2B54 /* Project object */;
 }
