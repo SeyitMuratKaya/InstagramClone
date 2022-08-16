@@ -17,6 +17,11 @@ struct ContentView: View {
                     Image(systemName: "house")
                     Text("Home")
                 }
+            SearchView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
             ImagePickerView()
                 .tabItem {
                     Image(systemName: "plus.app")

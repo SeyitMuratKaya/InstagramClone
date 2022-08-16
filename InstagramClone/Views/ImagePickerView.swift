@@ -28,7 +28,7 @@ class ImagePickerViewModel: ObservableObject{
         
         let ref = FirebaseManager.shared.storage.reference(withPath: storagePath)
         
-        guard let imageData = self.inputImage?.jpegData(compressionQuality: 1) else {return}
+        guard let imageData = self.inputImage?.jpegData(compressionQuality: 0.5) else {return}
         
         ref.putData(imageData, metadata: nil){ metadata, error in
             if let error = error {

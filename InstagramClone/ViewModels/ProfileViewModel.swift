@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum ProfileType{
+    case currentUser, others
+}
+
 class ProfileViewModel: ObservableObject{
     
     @Published var userName = ""
