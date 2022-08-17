@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView{
-            Text("photos")
+            HomeView()
                 .tabItem {
                     Image(systemName: "house")
                     Text("Home")
@@ -25,8 +25,9 @@ struct ContentView: View {
             ImagePickerView()
                 .tabItem {
                     Image(systemName: "plus.app")
+                    Text("Upload")
                 }
-            ProfileView()
+            ProfileView(profileType: .user)
                 .tabItem {
                     Image(systemName: "person")
                     Text("Profile")

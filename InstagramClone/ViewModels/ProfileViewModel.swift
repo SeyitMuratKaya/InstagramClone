@@ -7,16 +7,15 @@
 
 import Foundation
 
-enum ProfileType{
-    case currentUser, others
-}
-
 class ProfileViewModel: ObservableObject{
     
     @Published var userName = ""
     @Published var images: [String] = []
     
-    init(){
+    var profileType = ProfileType.user
+    
+    init(profileType:ProfileType){
+        self.profileType = profileType
         fetchProfile()
         updateProfile()
     }
