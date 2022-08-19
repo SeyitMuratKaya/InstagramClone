@@ -41,7 +41,7 @@ struct SearchView: View {
                 Section{
                     List{
                         ForEach(viewModel.filteredUsers.sorted(by: >),id: \.key){ userId, userName in
-                            NavigationLink(destination: OthersProfileView(userId: userId)) {
+                            NavigationLink(destination: ProfileView(profileType: .others, userId: userId)) {
                                 Text(userName)
                             }
                         }

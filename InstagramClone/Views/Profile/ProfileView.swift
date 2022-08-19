@@ -11,28 +11,27 @@ enum ProfileType{
 }
 
 struct ProfileView: View {
-    @State private var profileSelection = 0
-    @State private var showSettingsSheet = false
-    @State private var showFollowSheet = false
     
     @ObservedObject private var viewModel: ProfileViewModel
     @EnvironmentObject var viewRouter: ViewRouter
     
+    var userId = ""
     let profileType:ProfileType
     
-    init(profileType:ProfileType){
+    init(profileType:ProfileType,userId:String = ""){
+        self.userId = userId
         self.profileType = profileType
-        self.viewModel = ProfileViewModel(profileType: profileType)
+        self.viewModel = ProfileViewModel(profileType: profileType,userId: userId)
     }
     
     var body: some View {
         VStack{
-            ProfileTopView(showSettingsSheet: $showSettingsSheet)
-            ProfileDetailView(showFollowSheet: $showFollowSheet,userName: $viewModel.userName, profileType: .user)
+            ProfileTopView(showSettingsSheet: $viewModel.showSettingsSheet,showImagePickerSheet: $viewModel.showImagePickerSheet)
+            ProfileDetailView(viewModel: viewModel)
             Divider()
-            ProfilePhotosView(profileSelection: $profileSelection, images: $viewModel.images)
+            ProfilePhotosView(profileSelection: $viewModel.profileSelection, images: $viewModel.images)
         }
-        .sheet(isPresented: $showSettingsSheet) {
+        .sheet(isPresented: $viewModel.showSettingsSheet) {
             List{
                 Button("Sign Out"){
                     do { try FirebaseManager.shared.auth.signOut() }
@@ -41,7 +40,11 @@ struct ProfileView: View {
                 }
             }
         }
-        .sheet(isPresented: $showFollowSheet) {
+        .sheet(isPresented: $viewModel.showImagePickerSheet, content: {
+            ImagePickerView()
+        })
+        .fullScreenCover(isPresented: $viewModel.showFollowSheet) {
+            FollowView(followPicker: $viewModel.followSheetPickerValue, followers: viewModel.followersArray, followings: viewModel.followingsArray)
         }
     }
 }

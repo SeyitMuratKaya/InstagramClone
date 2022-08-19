@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ProfileDetailView: View {
-    @Binding var showFollowSheet:Bool
-    @Binding var userName:String
-    var profileType:ProfileType
+    @ObservedObject var viewModel:ProfileViewModel
     var body: some View {
         VStack{
             HStack{
@@ -23,23 +21,29 @@ struct ProfileDetailView: View {
                         Group{
                             Button{}label:{
                                 VStack{
-                                    Text("0")
+                                    Text(viewModel.postCount)
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Posts")
                                 }
                             }
-                            Button{showFollowSheet.toggle()}label:{
+                            Button{
+                                viewModel.showFollowSheet.toggle()
+                                viewModel.followSheetPickerValue = 0
+                            }label:{
                                 VStack{
-                                    Text("0")
+                                    Text(viewModel.followersCount)
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Followers")
                                 }
                             }
-                            Button{showFollowSheet.toggle()}label:{
+                            Button{
+                                viewModel.showFollowSheet.toggle()
+                                viewModel.followSheetPickerValue = 1
+                            }label:{
                                 VStack{
-                                    Text("0")
+                                    Text(viewModel.followingsCount)
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Following")
@@ -61,17 +65,17 @@ struct ProfileDetailView: View {
                 }
             }
             .padding([.top,.trailing])
-            switch profileType {
+            switch viewModel.profileType {
             case .user:
                 EmptyView()
             case .others:
                 HStack{
-                    Button{}label: { // todo follow
-                        Text("Follow")
+                    Button{viewModel.followStatus ? viewModel.unfollow() : viewModel.follow() }label: {
+                        Text(viewModel.followStatus ? "Unfollow" : "Follow")
                             .padding(5)
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.white)
-                            .background(.blue)
+                            .background(viewModel.followStatus ? .gray : .blue)
                             .cornerRadius(10)
                     }
                     Button{}label: {
@@ -87,7 +91,7 @@ struct ProfileDetailView: View {
             }
             VStack(alignment:.leading){
                 HStack{
-                    Text("\(userName)")
+                    Text("\(viewModel.userName)")
                         .font(.headline)
                     Spacer()
                 }
@@ -101,6 +105,6 @@ struct ProfileDetailView: View {
 
 struct ProfileDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileDetailView(showFollowSheet: .constant(false), userName: .constant("Murat"), profileType: .user)
+        ProfileDetailView(viewModel: ProfileViewModel(profileType: .user))
     }
 }

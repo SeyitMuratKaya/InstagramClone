@@ -10,47 +10,79 @@ import SwiftUI
 struct AuthView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @EnvironmentObject var viewRouter: ViewRouter
+    @State private var isEmailValid = true
     
     var body: some View {
-        NavigationView{
-            ScrollView{
-                VStack{
-                    Group{
-                        authViewModel.isNewUser ? TextField("Username",text: $authViewModel.username) : nil
-                        TextField("Email",text: $authViewModel.email)
-                        SecureField("Password",text: $authViewModel.password)
-                    }
+        VStack{
+            Text(authViewModel.isNewUser ? "SignUp" : "Login")
+                .padding(.top,50)
+                .font(.system(size: 50))
+            VStack{
+                authViewModel.isNewUser ?
+                TextField("Username",text: $authViewModel.username)
                     .padding()
-                    .background(.ultraThickMaterial)
-                    .cornerRadius(25)
                     .textInputAutocapitalization(.never)
-                    HStack{
-                        Spacer()
-                        Button{
-                            authViewModel.isNewUser.toggle()
-                        }label: {
-                            Text(authViewModel.isNewUser ? "Already have an account?" : "Create new account")
-                        }
+                    .overlay{
+                        RoundedRectangle(cornerRadius: 5)
+                            .strokeBorder(.gray,lineWidth: 1)
                     }
-                    Button{
-                        if authViewModel.isNewUser{
-                            authViewModel.signUpUser(self.viewRouter)
-                        }else{
-                            authViewModel.loginUser(self.viewRouter)
+                : nil
+                VStack{
+                    TextField("Email",text: $authViewModel.email)
+                        .padding()
+                        .textInputAutocapitalization(.never)
+                        .overlay{
+                            RoundedRectangle(cornerRadius: 5)
+                                .strokeBorder(.gray,lineWidth: 1)
                         }
-                    }label: {
-                        Text(authViewModel.isNewUser ? "Sign Up" : "Login")
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth:.infinity)
-                            .background(.blue)
-                            .cornerRadius(25)
+                    if !isEmailValid && authViewModel.isNewUser{
+                        HStack{
+                            Spacer()
+                            Text("incorrect email")
+                                .bold()
+                                .padding([.trailing])
+                                .font(.subheadline)
+                                .foregroundColor(.red)
+                        }
                     }
                 }
-                .padding()
+                SecureField("Password",text: $authViewModel.password)
+                    .padding()
+                    .textInputAutocapitalization(.never)
+                    .overlay{
+                        RoundedRectangle(cornerRadius: 5)
+                            .strokeBorder(.gray,lineWidth: 1)
+                    }
             }
-            .navigationTitle(authViewModel.isNewUser ? "Sign Up" : "Login")
+            HStack{
+                Spacer()
+                Button{
+                    authViewModel.isNewUser.toggle()
+                }label: {
+                    Text(authViewModel.isNewUser ? "Already have an account?" : "Create new account")
+                }
+            }
+            Button{
+                if authViewModel.isNewUser{
+                    if authViewModel.validateInput(){
+                        authViewModel.signUpUser(self.viewRouter)
+                    }else{
+                        isEmailValid = false
+                    }
+                }else{
+                    authViewModel.loginUser(self.viewRouter)
+                }
+            }label: {
+                Text(authViewModel.isNewUser ? "Sign Up" : "Login")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth:.infinity)
+                    .background(authViewModel.username.isEmpty && authViewModel.isNewUser ? .gray : .blue)
+                    .cornerRadius(10)
+            }
+            Spacer()
         }
+        .padding()
         .onAppear{
             if FirebaseManager.shared.auth.currentUser != nil {
                 guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
@@ -58,7 +90,6 @@ struct AuthView: View {
                 viewRouter.currentPage = .contentView
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
 

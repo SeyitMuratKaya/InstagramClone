@@ -22,11 +22,6 @@ struct ContentView: View {
                     Image(systemName: "magnifyingglass")
                     Text("Search")
                 }
-            ImagePickerView()
-                .tabItem {
-                    Image(systemName: "plus.app")
-                    Text("Upload")
-                }
             ProfileView(profileType: .user)
                 .tabItem {
                     Image(systemName: "person")

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FollowView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var followPicker = 0
+    @Binding var followPicker:Int
     
     let followers: [String]
     let followings: [String]
@@ -38,6 +38,7 @@ struct FollowView: View {
                         Text(following)
                     }
                 }
+                .listStyle(.plain)
                 .tag(1)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -48,6 +49,6 @@ struct FollowView: View {
 
 struct FollowView_Previews: PreviewProvider {
     static var previews: some View {
-        FollowView(followers: [], followings: [])
+        FollowView(followPicker: .constant(0), followers: [], followings: [])
     }
 }

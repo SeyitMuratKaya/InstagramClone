@@ -11,9 +11,18 @@ class AuthViewModel: ObservableObject{
     @Published var email = "murat@gmail.com"
     @Published var password = "123456"
     @Published var username = ""
-    @Published var isNewUser = true
+    @Published var isNewUser = false
     
     var viewRouter: ViewRouter?
+    
+    
+    func validateInput()->Bool{
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailPred.evaluate(with: email)
+    }
+    
     
     func signUpUser(_ viewRouter:ViewRouter){
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { result, error in
