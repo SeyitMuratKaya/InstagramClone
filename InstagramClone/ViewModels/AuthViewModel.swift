@@ -33,13 +33,16 @@ class AuthViewModel: ObservableObject{
             guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
             print(uid)
             FirebaseManager.shared.firestore.collection("users").document(uid).setData([
-                "username" : self.username
+                "username" : self.username,
+                "images" : [],
+                "followers" : [],
+                "followings" : []
             ]) { err in
                 if let err = err {
                     print("Error writing document: \(err)")
                 } else {
                     print("Document successfully written!")
-                    viewRouter.currentPage = .contentView
+                    viewRouter.currentPage = .profileCreationView
                 }
             }
         }

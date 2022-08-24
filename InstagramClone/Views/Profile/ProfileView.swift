@@ -26,11 +26,12 @@ struct ProfileView: View {
     
     var body: some View {
         VStack{
-            ProfileTopView(showSettingsSheet: $viewModel.showSettingsSheet,showImagePickerSheet: $viewModel.showImagePickerSheet)
+            ProfileTopView(showSettingsSheet: $viewModel.showSettingsSheet,showImagePickerSheet: $viewModel.showImagePickerSheet,profileType: profileType)
             ProfileDetailView(viewModel: viewModel)
             Divider()
             ProfilePhotosView(profileSelection: $viewModel.profileSelection, images: $viewModel.images)
         }
+        .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.showSettingsSheet) {
             List{
                 Button("Sign Out"){
@@ -40,11 +41,15 @@ struct ProfileView: View {
                 }
             }
         }
-        .sheet(isPresented: $viewModel.showImagePickerSheet, content: {
+        .sheet(isPresented: $viewModel.showImagePickerSheet){
             ImagePickerView()
-        })
+        }
+        .sheet(isPresented: $viewModel.showPicturePicker) {
+            ImagePicker(image: $viewModel.inputImage)
+        }
+        .onChange(of: viewModel.inputImage){ _ in viewModel.updateProfilePicture()}
         .fullScreenCover(isPresented: $viewModel.showFollowSheet) {
-            FollowView(followPicker: $viewModel.followSheetPickerValue, followers: viewModel.followersArray, followings: viewModel.followingsArray)
+            FollowView(followPicker: $viewModel.followSheetPickerValue, viewModel: viewModel)
         }
     }
 }

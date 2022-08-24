@@ -8,33 +8,33 @@
 import SwiftUI
 
 struct PhotosView: View {
+    let data = (1...100).map { "Item \($0)" }
     
     let columns: [GridItem] = Array(repeating: .init(.flexible(),spacing:1), count: 3)
     
-    var imageURLs: [String]
+    var imageURLs: [String] = []
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns,spacing: 1) {
                 ForEach(imageURLs.reversed(), id: \.self) { imageURL in
-                    Color.clear.overlay(
-                        AsyncImage(url: URL(string: imageURL)) { phase in
-                            switch phase {
-                            case .success(let image):
+                    GeometryReader{ gr in
+                        AsyncImage(url: URL(string: imageURL)) { image in
+                            VStack {
                                 image
                                     .resizable()
                                     .scaledToFill()
-                            default:
-                                ZStack{
-                                    Color.gray
-                                    ProgressView()
-                                }
+                                    .frame(height: gr.size.width, alignment: .center)
+                            }
+                        } placeholder: {
+                            ZStack {
+                                Color.gray
+                                ProgressView()
                             }
                         }
-                    )
-                    .frame(maxWidth: .infinity)
-                    .aspectRatio(1, contentMode: .fit)
+                    }
                     .clipped()
+                    .aspectRatio(1, contentMode: .fit)
                 }
             }
         }

@@ -11,8 +11,7 @@ struct FollowView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var followPicker:Int
     
-    let followers: [String]
-    let followings: [String]
+    @ObservedObject var viewModel: ProfileViewModel
     
     var body: some View {
         VStack {
@@ -27,14 +26,14 @@ struct FollowView: View {
             .padding()
             TabView(selection: $followPicker) {
                 List{
-                    ForEach(followers,id: \.self){ follower in
+                    ForEach(viewModel.followersArray,id: \.self){ follower in
                         Text(follower)
                     }
                 }
                 .listStyle(.plain)
                 .tag(0)
                 List{
-                    ForEach(followings,id: \.self){ following in
+                    ForEach(viewModel.followingsArray,id: \.self){ following in
                         Text(following)
                     }
                 }
@@ -43,12 +42,15 @@ struct FollowView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
         }
+        .onAppear{
+            viewModel.chooseUserToFetchFollows()
+        }
 
     }
 }
 
 struct FollowView_Previews: PreviewProvider {
     static var previews: some View {
-        FollowView(followPicker: .constant(0), followers: [], followings: [])
+        FollowView(followPicker: .constant(0), viewModel: ProfileViewModel(profileType: .user))
     }
 }

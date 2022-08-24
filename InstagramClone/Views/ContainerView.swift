@@ -9,6 +9,7 @@ import SwiftUI
 
 enum Page {
     case authView
+    case profileCreationView
     case contentView
 }
 
@@ -21,11 +22,13 @@ struct ContainerView: View {
     
     var body: some View {
         switch viewRouter.currentPage {
-            case .authView:
-                AuthView()
-            case .contentView:
-                ContentView()
-            }
+        case .authView:
+            AuthView()
+        case .contentView:
+            ContentView()
+        case .profileCreationView:
+            ProfileCreationView()
+        }
     }
 }
 

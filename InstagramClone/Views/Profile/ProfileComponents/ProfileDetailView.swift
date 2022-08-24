@@ -12,10 +12,22 @@ struct ProfileDetailView: View {
     var body: some View {
         VStack{
             HStack{
-                Circle()
-                    .padding([.leading])
-                    .frame(width: 100, height: 100)
-                    .aspectRatio(contentMode: .fit)
+                Button{
+                    if viewModel.profileType == .user{
+                        viewModel.showPicturePicker.toggle()
+                    }
+                }label: {
+                    AsyncImage(url: URL(string: viewModel.profilePicture)){ image in
+                        image
+                            .resizable()
+                            .clipShape(Circle())
+                            .padding([.leading])
+                            .frame(width: 100, height: 100)
+                    }placeholder: {
+                        ProgressView()
+                            .frame(width: 100, height: 100)
+                    }
+                }
                 VStack{
                     HStack{
                         Group{
