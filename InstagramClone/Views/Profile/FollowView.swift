@@ -14,38 +14,45 @@ struct FollowView: View {
     @ObservedObject var viewModel: ProfileViewModel
     
     var body: some View {
-        VStack {
-            HStack{
-                Button{presentationMode.wrappedValue.dismiss()}label:{Image(systemName: "chevron.left")}
-                Picker("FollowPicker", selection: $followPicker) {
-                    Text("Followers").tag(0)
-                    Text("Following").tag(1)
-                }
-                .pickerStyle(.segmented)
-            }
-            .padding()
-            TabView(selection: $followPicker) {
-                List{
-                    ForEach(viewModel.followersArray,id: \.self){ follower in
-                        Text(follower)
+        NavigationView{
+            VStack {
+                HStack{
+                    Button{presentationMode.wrappedValue.dismiss()}label:{Image(systemName: "chevron.left")}
+                    Picker("FollowPicker", selection: $followPicker) {
+                        Text("Followers").tag(0)
+                        Text("Following").tag(1)
                     }
+                    .pickerStyle(.segmented)
                 }
-                .listStyle(.plain)
-                .tag(0)
-                List{
-                    ForEach(viewModel.followingsArray,id: \.self){ following in
-                        Text(following)
+                .padding()
+                TabView(selection: $followPicker) {
+                    List{
+                        ForEach(viewModel.followers){ follower in
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid)) {
+                                Text(follower.userName)
+                            }
+                        }
                     }
+                    .listStyle(.plain)
+                    .tag(0)
+                    List{
+                        ForEach(viewModel.followings){ following in
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid)) {
+                                Text(following.userName)
+                            }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .tag(1)
                 }
-                .listStyle(.plain)
-                .tag(1)
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .navigationBarHidden(true)
         }
         .onAppear{
             viewModel.chooseUserToFetchFollows()
         }
-
+        
     }
 }
 

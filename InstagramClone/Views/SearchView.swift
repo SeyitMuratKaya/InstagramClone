@@ -29,7 +29,6 @@ class SearchViewModel: ObservableObject{
                 }
                 
                 self.users = self.users.filter({$0.value[0].contains(searchedUser)})
-                print(self.users)
             }
         }
     }

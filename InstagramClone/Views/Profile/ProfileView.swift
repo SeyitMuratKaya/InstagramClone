@@ -29,7 +29,7 @@ struct ProfileView: View {
             ProfileTopView(showSettingsSheet: $viewModel.showSettingsSheet,showImagePickerSheet: $viewModel.showImagePickerSheet,profileType: profileType)
             ProfileDetailView(viewModel: viewModel)
             Divider()
-            ProfilePhotosView(profileSelection: $viewModel.profileSelection, images: $viewModel.images)
+            ProfilePhotosView(viewModel: viewModel)
         }
         .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.showSettingsSheet) {
@@ -39,6 +39,10 @@ struct ProfileView: View {
                     catch { print("already logged out") }
                     viewRouter.currentPage = .authView
                 }
+                Button("Edit Bio"){
+                    
+                }
+
             }
         }
         .sheet(isPresented: $viewModel.showImagePickerSheet){
@@ -50,6 +54,22 @@ struct ProfileView: View {
         .onChange(of: viewModel.inputImage){ _ in viewModel.updateProfilePicture()}
         .fullScreenCover(isPresented: $viewModel.showFollowSheet) {
             FollowView(followPicker: $viewModel.followSheetPickerValue, viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $viewModel.showProfilePhotos){
+            ProfilePostsView(viewModel: viewModel)
+        }
+        .onAppear{
+            if profileType == .others{
+                viewModel.fetchOthersProfile(userId: userId)
+            }
+        }
+        .onDisappear{
+            switch profileType {
+            case .user:
+                print("user disappeared")
+            case .others:
+                print("others disappeared")
+            }
         }
     }
 }

@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct ProfilePhotosView: View {
-    @Binding var profileSelection: Int
-    @Binding var images: [String]
+    @ObservedObject var viewModel:ProfileViewModel
     var body: some View {
         VStack{
-            Picker("profiletab",selection: $profileSelection){
+            Picker("profiletab",selection: $viewModel.profileSelection){
                 Image(systemName: "square.grid.3x3").tag(0)
                 Image(systemName: "paperplane").tag(1)
             }
             .pickerStyle(.segmented)
-            TabView(selection: $profileSelection){
-                PhotosView(imageURLs: images)
+            TabView(selection: $viewModel.profileSelection){
+                PhotosView(imageURLs: viewModel.userProfile.images,showProfilePhotos: $viewModel.showProfilePhotos, postIndex: $viewModel.postIndex)
                     .tag(0)
                 Text("Placeholder")
                     .tag(1)
@@ -31,6 +30,6 @@ struct ProfilePhotosView: View {
 
 struct ProfilePhotosView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfilePhotosView(profileSelection: .constant(0), images: .constant([]))
+        ProfilePhotosView(viewModel: ProfileViewModel(profileType: .user))
     }
 }

@@ -12,24 +12,34 @@ struct PhotosView: View {
     
     let columns: [GridItem] = Array(repeating: .init(.flexible(),spacing:1), count: 3)
     
-    var imageURLs: [String] = []
-    
+    var imageURLs: [ImageModel] = []
+    @Binding var showProfilePhotos: Bool
+    @Binding var postIndex: Int
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns,spacing: 1) {
-                ForEach(imageURLs.reversed(), id: \.self) { imageURL in
+                ForEach(Array(imageURLs.enumerated()).reversed(),id:\.element) {index, imageURL in
                     GeometryReader{ gr in
-                        AsyncImage(url: URL(string: imageURL)) { image in
-                            VStack {
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: gr.size.width, alignment: .center)
-                            }
-                        } placeholder: {
-                            ZStack {
-                                Color.gray
-                                ProgressView()
+                        Button{
+                            showProfilePhotos.toggle()
+                            postIndex = index
+                        }label: {
+                            AsyncImage(url: URL(string: imageURL.url)) { phase in
+                                if let image = phase.image{
+                                    VStack {
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(height: gr.size.width, alignment: .center)
+                                    }
+                                } else if phase.error != nil {
+                                    Color.red
+                                }else{
+                                    ZStack {
+                                        Color.gray
+                                        ProgressView()
+                                    }
+                                }
                             }
                         }
                     }
@@ -43,6 +53,6 @@ struct PhotosView: View {
 
 struct PhotosView_Previews: PreviewProvider {
     static var previews: some View {
-        PhotosView(imageURLs: [""])
+        PhotosView(imageURLs: [], showProfilePhotos: .constant(false), postIndex: .constant(0))
     }
 }

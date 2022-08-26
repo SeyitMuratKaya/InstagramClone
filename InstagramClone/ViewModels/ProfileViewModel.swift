@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class ProfileViewModel: ObservableObject{
     @Published var profileSelection = 0
@@ -15,23 +16,20 @@ class ProfileViewModel: ObservableObject{
     @Published var showFollowSheet = false
     @Published var followSheetPickerValue = 0
     @Published var showImagePickerSheet = false
-    
-    @Published var userName = ""
-    @Published var images: [String] = []
-    
-    @Published var profilePicture:String = ""
     @Published var showPicturePicker = false
+    @Published var showProfilePhotos = false
+    
+    @Published var followers: [FollowModel] = []
+    @Published var followings: [FollowModel] = []
+    
     @Published var image: Image?
     @Published var inputImage: UIImage?
     
-    @Published var followersArray: [String] = []
-    @Published var followingsArray: [String] = []
-    
     @Published var followStatus:Bool = false
     
-    @Published var followersCount:String = ""
-    @Published var followingsCount:String = ""
-    @Published var postCount:String = ""
+    @Published var userProfile = ProfileModel(username: "", detail: "", profilePicture: "", followers: [], followings: [], images: [])
+    @Published var posts: [PostModel] = []
+    @Published var postIndex: Int = 0
     
     var userId = ""
     var profileType = ProfileType.user
@@ -45,7 +43,6 @@ class ProfileViewModel: ObservableObject{
             updateProfile()
         case .others:
             getFollowStatus()
-            fetchOthersProfile(userId: userId)
         }
     }
     
@@ -57,26 +54,21 @@ class ProfileViewModel: ObservableObject{
                 print("(updateProfile) Error fetching document: \(error!)")
                 return
             }
-            guard let data = document.data() else {
-                print("(updateProfile) Document data was empty.")
-                return
+            
+            do {
+                self.userProfile = try document.data(as: ProfileModel.self)
+            }catch{
+                print("Error decoding user profile: \(error)")
+            }
+            print("(updateProfile) user profile updated")
+            self.posts.removeAll()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/YY"
+            
+            for image in self.userProfile.images{
+                self.posts.append(PostModel(url: image.url, uid:uid, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture))
             }
             
-            self.images = data["images"] as? [String] ?? []
-            
-            self.profilePicture = data["profilePicture"] as? String ?? ""
-            
-            self.userName = data["username"] as? String ?? ""
-            
-            let followers = data["followers"] as? [String] ?? []
-            self.followersCount = String(followers.count)
-            
-            let followings = data["followings"] as? [String] ?? []
-            self.followingsCount = String(followings.count)
-            
-            self.postCount = String(self.images.count)
-            
-            print("(updateProfile) user profile updated")
         }
     }
     
@@ -189,49 +181,23 @@ class ProfileViewModel: ObservableObject{
     
     //Other user functions
     
-    //    private func updateOthersProfile(userId:String){
-    //
-    //        FirebaseManager.shared.firestore.collection("users").document(userId).addSnapshotListener { documentSnapshot, error in
-    //            guard let document = documentSnapshot else {
-    //                print("Error fetching document: \(error!)")
-    //                return
-    //            }
-    //            guard let data = document.data() else {
-    //                print("Document data was empty.")
-    //                return
-    //            }
-    //
-    //            self.userName = data["username"] as? String ?? ""
-    //            self.images = data["images"] as? [String] ?? []
-    //            let followers = data["followers"] as? [String] ?? []
-    //            self.followersCount = String(followers.count)
-    //            let followings = data["followings"] as? [String] ?? []
-    //            self.followingsCount = String(followings.count)
-    //            self.postCount = String(self.images.count)
-    //
-    //            print("others profile updated")
-    //        }
-    //    }
-    
-    private func fetchOthersProfile(userId:String){
+    func fetchOthersProfile(userId:String){
         
         let doc = FirebaseManager.shared.firestore.collection("users").document(userId)
         
-        doc.getDocument { (document, error) in
+        doc.getDocument(as: ProfileModel.self) { result in
             
-            if let document = document, document.exists {
-                let data = document.data()
-                self.userName = data?["username"] as? String ?? ""
-                self.images = data?["images"] as? [String] ?? []
-                let followers = data?["followers"] as? [String] ?? []
-                self.followersCount = String(followers.count)
-                let followings = data?["followings"] as? [String] ?? []
-                self.followingsCount = String(followings.count)
-                self.postCount = String(self.images.count)
-                
-                
-            } else {
-                print("(fetchOthersProfile) Document does not exist")
+            switch result{
+            case .success(let userProfile):
+                self.userProfile = userProfile
+            case .failure(let error):
+                print("Error decoding user profile: \(error)")
+            }
+            self.posts.removeAll()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/YY"
+            for image in self.userProfile.images{
+                self.posts.append(PostModel(url: image.url, uid: self.userId, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture))
             }
         }
     }
@@ -272,7 +238,7 @@ class ProfileViewModel: ObservableObject{
     }
     
     private func findFollows(uids:[String],type:Bool){
-        type ? self.followersArray.removeAll() : self.followingsArray.removeAll()
+        type ? self.followers.removeAll() : self.followings.removeAll()
         for uid in uids {
             let doc = FirebaseManager.shared.firestore.collection("users").document(uid)
             doc.getDocument { (document, error) in
@@ -280,8 +246,7 @@ class ProfileViewModel: ObservableObject{
                 if let document = document, document.exists {
                     let data = document.data()
                     let userName = data?["username"] as? String ?? ""
-                    type ? self.followersArray.append(userName) : self.followingsArray.append(userName)
-                    print(" followings array count \(self.followingsArray)")
+                    type ? self.followers.append(FollowModel(uid: uid, userName: userName)) : self.followings.append(FollowModel(uid: uid, userName: userName))
                 } else {
                     print("Document does not exist")
                 }

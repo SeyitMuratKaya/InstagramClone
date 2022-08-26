@@ -7,11 +7,13 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class ImagePickerViewModel: ObservableObject{
     @Published var image: Image?
     @Published var inputImage: UIImage?
     @Published var showingImagePicker = false
+    @Published var detailText = ""
     
     func loadImage() {
         guard let inputImage = inputImage else { return }
@@ -48,7 +50,7 @@ class ImagePickerViewModel: ObservableObject{
     func saveImageToProfile(url:String){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
         FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "images": FieldValue.arrayUnion([url])
+            "images": FieldValue.arrayUnion([["timestamp": Date(), "url": url,"detailText":self.detailText]])
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")

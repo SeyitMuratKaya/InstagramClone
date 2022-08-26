@@ -17,15 +17,24 @@ struct ProfileDetailView: View {
                         viewModel.showPicturePicker.toggle()
                     }
                 }label: {
-                    AsyncImage(url: URL(string: viewModel.profilePicture)){ image in
-                        image
-                            .resizable()
-                            .clipShape(Circle())
-                            .padding([.leading])
-                            .frame(width: 100, height: 100)
-                    }placeholder: {
-                        ProgressView()
-                            .frame(width: 100, height: 100)
+                    AsyncImage(url: URL(string: viewModel.userProfile.profilePicture)){ phase in
+                        if let image = phase.image{
+                            image
+                                .resizable()
+                                .clipShape(Circle())
+                                .padding([.leading])
+                                .frame(width: 100, height: 100)
+                        }else if phase.error != nil {
+                            Color
+                                .red
+                                .clipShape(Circle())
+                                .padding([.leading])
+                                .frame(width: 100, height: 100)
+
+                        }else{
+                            ProgressView()
+                                .frame(width: 100, height: 100)
+                        }
                     }
                 }
                 VStack{
@@ -33,7 +42,7 @@ struct ProfileDetailView: View {
                         Group{
                             Button{}label:{
                                 VStack{
-                                    Text(viewModel.postCount)
+                                    Text("\(viewModel.userProfile.images.count)")
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Posts")
@@ -44,7 +53,7 @@ struct ProfileDetailView: View {
                                 viewModel.followSheetPickerValue = 0
                             }label:{
                                 VStack{
-                                    Text(viewModel.followersCount)
+                                    Text("\(viewModel.userProfile.followers.count)")
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Followers")
@@ -55,7 +64,7 @@ struct ProfileDetailView: View {
                                 viewModel.followSheetPickerValue = 1
                             }label:{
                                 VStack{
-                                    Text(viewModel.followingsCount)
+                                    Text("\(viewModel.userProfile.followings.count)")
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Following")
@@ -103,11 +112,11 @@ struct ProfileDetailView: View {
             }
             VStack(alignment:.leading){
                 HStack{
-                    Text("\(viewModel.userName)")
+                    Text("\(viewModel.userProfile.username)")
                         .font(.headline)
                     Spacer()
                 }
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                Text(viewModel.userProfile.detail)
             }
             .padding()
             .frame(maxWidth:.infinity)

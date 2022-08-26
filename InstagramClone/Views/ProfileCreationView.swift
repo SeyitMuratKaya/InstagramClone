@@ -11,6 +11,8 @@ import FirebaseFirestore
 class ProfileCreationViewModel:ObservableObject{
     @Published var image: Image?
     @Published var inputImage: UIImage?
+    @Published var detail:String = ""
+    @Published var showImagePicker = false
     
     func loadImage() {
         guard let inputImage = inputImage else { return }
@@ -46,7 +48,8 @@ class ProfileCreationViewModel:ObservableObject{
     func saveImageToProfile(url:String,viewRouter:ViewRouter){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
         FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "profilePicture": url
+            "profilePicture": url,
+            "detail": self.detail
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
@@ -63,32 +66,48 @@ struct ProfileCreationView: View {
     @StateObject private var viewModel = ProfileCreationViewModel()
     @EnvironmentObject var viewRouter: ViewRouter
     
-    @State private var bio:String = ""
-    @State private var showImagePicker = false
-    
     var body: some View {
         VStack {
             Button{
-                showImagePicker.toggle()
+                viewModel.showImagePicker.toggle()
             }label: {
                 VStack{
                     if let image = viewModel.image {
                         image
                             .resizable()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
                     }else{
                         Image(systemName: "person")
                             .resizable()
+                            .foregroundColor(.gray)
+                            .padding()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
                     }
                 }
+                .padding()
             }
-            TextEditor(text: $bio)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
-            Button("save"){
+            TextEditor(text: $viewModel.detail)
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(.gray, lineWidth: 2)
+                )
+            Button{
                 viewModel.uploadProfilePicture(viewRouter: self.viewRouter)
+            }label: {
+                Text("Save")
+                    .foregroundColor(.white)
+                    .frame(maxWidth:.infinity)
+                    .padding()
+                    .background(.blue)
+                    .cornerRadius(15)
             }
         }
+        .padding()
         .onChange(of: viewModel.inputImage) { _ in viewModel.loadImage() }
-        .sheet(isPresented: $showImagePicker) {
+        .sheet(isPresented: $viewModel.showImagePicker) {
             ImagePicker(image: $viewModel.inputImage)
         }
         
