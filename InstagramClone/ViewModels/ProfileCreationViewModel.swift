@@ -1,20 +1,19 @@
 //
-//  ImagePickerViewModel.swift
+//  ProfileCreationViewModel.swift
 //  InstagramClone
 //
-//  Created by Seyit Murat Kaya on 22.08.2022.
+//  Created by Seyit Murat Kaya on 26.08.2022.
 //
 
+import Foundation
 import SwiftUI
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
-class ImagePickerViewModel: ObservableObject{
+class ProfileCreationViewModel:ObservableObject{
     @Published var image: Image?
     @Published var inputImage: UIImage?
-    @Published var showingImagePicker = false
-    @Published var detailText = ""
-    @Published var imageUploadProgressStatus = false
+    @Published var detail:String = ""
+    @Published var showImagePicker = false
     
     func loadImage() {
         guard let inputImage = inputImage else { return }
@@ -22,12 +21,11 @@ class ImagePickerViewModel: ObservableObject{
         image = Image(uiImage: inputImage)
     }
     
-    func uploadImage(){
+    
+    func uploadProfilePicture(viewRouter:ViewRouter){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
-        self.imageUploadProgressStatus = true
-        let file = UUID()
         
-        let storagePath = "\(uid)/images/\(file)"
+        let storagePath = "\(uid)/profilePicture/"
         
         let ref = FirebaseManager.shared.storage.reference(withPath: storagePath)
         
@@ -43,22 +41,24 @@ class ImagePickerViewModel: ObservableObject{
                     print("url download error")
                     return
                 }
-                self.saveImageToProfile(url: downloadUrl.absoluteString)
+                self.saveImageToProfile(url: downloadUrl.absoluteString,viewRouter: viewRouter)
             }
         }
     }
     
-    func saveImageToProfile(url:String){
+    func saveImageToProfile(url:String,viewRouter:ViewRouter){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
         FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "images": FieldValue.arrayUnion([["timestamp": Date(), "url": url,"detailText":self.detailText]])
+            "profilePicture": url,
+            "detail": self.detail
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
                 print("Document successfully updated")
-                self.imageUploadProgressStatus = false
+                viewRouter.currentPage = .contentView
             }
         }
     }
+    
 }

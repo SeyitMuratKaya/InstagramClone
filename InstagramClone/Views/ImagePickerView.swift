@@ -20,6 +20,12 @@ struct ImagePickerView: View {
                         image
                             .resizable()
                             .scaledToFit()
+                            .overlay{
+                                if viewModel.imageUploadProgressStatus{
+                                    ProgressView("Uploading")
+                                        .scaleEffect(3)
+                                }
+                            }
                     }else{
                         Color.gray
                             .scaledToFit()
@@ -29,18 +35,27 @@ struct ImagePickerView: View {
             .padding()
             VStack{
                 Text("Detail")
-                TextField("detail",text: $viewModel.detailText)
+                TextField("",text: $viewModel.detailText)
                     .padding()
                     .textInputAutocapitalization(.never)
                     .overlay{
-                        RoundedRectangle(cornerRadius: 5)
+                        RoundedRectangle(cornerRadius: 10)
                             .strokeBorder(.gray,lineWidth: 1)
                     }
             }
             .padding()
-            Button("Upload"){
+            Button{
                 viewModel.uploadImage()
+            }label: {
+                Text("Upload")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth:.infinity)
+                    .background(.blue)
+                    .cornerRadius(10)
+                    
             }
+            .padding()
             Spacer()
         }
         .onChange(of: viewModel.inputImage) { _ in viewModel.loadImage() }

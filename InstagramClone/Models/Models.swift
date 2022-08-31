@@ -17,6 +17,7 @@ struct ImageModel:Codable,Identifiable,Hashable{
     var id: String { url }
     var timestamp: Date
     var url: String
+    var detailText:String
 }
 
 struct ProfileModel:Codable,Identifiable{
@@ -36,4 +37,11 @@ struct PostModel:Identifiable,Hashable{
     var timestamp: String
     var username: String
     var profilePicture: String
+    var detailText: String
+}
+
+struct SearchModel:Identifiable{
+    var id: String { userID }
+    let userID: String
+    let value: [String]
 }

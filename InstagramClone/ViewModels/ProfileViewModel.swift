@@ -66,7 +66,7 @@ class ProfileViewModel: ObservableObject{
             dateFormatter.dateFormat = "dd/MM/YY"
             
             for image in self.userProfile.images{
-                self.posts.append(PostModel(url: image.url, uid:uid, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture))
+                self.posts.append(PostModel(url: image.url, uid:uid, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture, detailText: image.detailText))
             }
             
         }
@@ -197,7 +197,7 @@ class ProfileViewModel: ObservableObject{
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd/MM/YY"
             for image in self.userProfile.images{
-                self.posts.append(PostModel(url: image.url, uid: self.userId, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture))
+                self.posts.append(PostModel(url: image.url, uid: self.userId, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture, detailText: image.detailText))
             }
         }
     }

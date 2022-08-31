@@ -53,7 +53,7 @@ struct ProfileDetailView: View {
                                 viewModel.followSheetPickerValue = 0
                             }label:{
                                 VStack{
-                                    Text("\(viewModel.userProfile.followers.count)")
+                                    Text("\( viewModel.userProfile.followers.count)")
                                         .padding([.bottom],2)
                                         .font(.headline)
                                     Text("Followers")

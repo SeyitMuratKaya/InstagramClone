@@ -12,7 +12,7 @@ struct FollowView: View {
     @Binding var followPicker:Int
     
     @ObservedObject var viewModel: ProfileViewModel
-    
+        
     var body: some View {
         NavigationView{
             VStack {
@@ -28,7 +28,7 @@ struct FollowView: View {
                 TabView(selection: $followPicker) {
                     List{
                         ForEach(viewModel.followers){ follower in
-                            NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid)) {
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid,followers: viewModel.followers,followings: viewModel.followings)) {
                                 Text(follower.userName)
                             }
                         }
@@ -37,7 +37,7 @@ struct FollowView: View {
                     .tag(0)
                     List{
                         ForEach(viewModel.followings){ following in
-                            NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid)) {
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid,followers: viewModel.followers,followings: viewModel.followings)) {
                                 Text(following.userName)
                             }
                         }

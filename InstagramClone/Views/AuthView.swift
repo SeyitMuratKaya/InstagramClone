@@ -80,6 +80,7 @@ struct AuthView: View {
                     .background(authViewModel.username.isEmpty && authViewModel.isNewUser ? .gray : .blue)
                     .cornerRadius(10)
             }
+            .disabled(authViewModel.username.isEmpty && authViewModel.isNewUser)
             Spacer()
         }
         .padding()

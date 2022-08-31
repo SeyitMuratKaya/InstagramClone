@@ -18,7 +18,7 @@ struct ProfileView: View {
     var userId = ""
     let profileType:ProfileType
     
-    init(profileType:ProfileType,userId:String = ""){
+    init(profileType:ProfileType,userId:String = "",followers:[FollowModel] = [],followings:[FollowModel] = []){
         self.userId = userId
         self.profileType = profileType
         self.viewModel = ProfileViewModel(profileType: profileType,userId: userId)
@@ -42,7 +42,7 @@ struct ProfileView: View {
                 Button("Edit Bio"){
                     
                 }
-
+                
             }
         }
         .sheet(isPresented: $viewModel.showImagePickerSheet){

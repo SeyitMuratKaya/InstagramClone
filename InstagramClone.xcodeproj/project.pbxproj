@@ -10,6 +10,10 @@
 		2F2C35E728AA417A00F708D1 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */; };
 		2F2C35E928AA422600F708D1 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */; };
 		2F2EEDBC28B8B553001C8F7F /* ProfilePostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2EEDBB28B8B553001C8F7F /* ProfilePostsView.swift */; };
+		2F2EEDBE28B8F76A001C8F7F /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2EEDBD28B8F76A001C8F7F /* PostView.swift */; };
+		2F2EEDC028B8F7BB001C8F7F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2EEDBF28B8F7BB001C8F7F /* HomeViewModel.swift */; };
+		2F2EEDC228B8F828001C8F7F /* ProfileCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2EEDC128B8F828001C8F7F /* ProfileCreationViewModel.swift */; };
+		2F2EEDC428B8F8A6001C8F7F /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2EEDC328B8F8A6001C8F7F /* SearchViewModel.swift */; };
 		2F3BD02428B6A41E00B6FD35 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3BD02328B6A41E00B6FD35 /* FirebaseAuth */; };
 		2F3BD02628B6A41E00B6FD35 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3BD02528B6A41E00B6FD35 /* FirebaseFirestore */; };
 		2F3BD02828B6A41E00B6FD35 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3BD02728B6A41E00B6FD35 /* FirebaseFirestoreSwift */; };
@@ -40,6 +44,10 @@
 		2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		2F2EEDBB28B8B553001C8F7F /* ProfilePostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePostsView.swift; sourceTree = "<group>"; };
+		2F2EEDBD28B8F76A001C8F7F /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		2F2EEDBF28B8F7BB001C8F7F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		2F2EEDC128B8F828001C8F7F /* ProfileCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCreationViewModel.swift; sourceTree = "<group>"; };
+		2F2EEDC328B8F8A6001C8F7F /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		2F472BCA28ACE33A0061899A /* FollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowView.swift; sourceTree = "<group>"; };
 		2F472BCE28AD17550061899A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		2F472BD128AD2C030061899A /* ProfileTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTopView.swift; sourceTree = "<group>"; };
@@ -89,6 +97,7 @@
 				2FC89E7728AB724400BCB64A /* SearchView.swift */,
 				2F472BC928ACE2F10061899A /* Profile */,
 				2FA1D68128AA26850067FB5C /* ImagePickerView.swift */,
+				2F2EEDBD28B8F76A001C8F7F /* PostView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -99,6 +108,9 @@
 				2F2C35E628AA417A00F708D1 /* AuthViewModel.swift */,
 				2F2C35E828AA422600F708D1 /* ProfileViewModel.swift */,
 				2F97F02828B38E250098380F /* ImagePickerViewModel.swift */,
+				2F2EEDBF28B8F7BB001C8F7F /* HomeViewModel.swift */,
+				2F2EEDC128B8F828001C8F7F /* ProfileCreationViewModel.swift */,
+				2F2EEDC328B8F8A6001C8F7F /* SearchViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -253,20 +265,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F472BD428AD2C4B0061899A /* ProfileDetailView.swift in Sources */,
+				2F2EEDC028B8F7BB001C8F7F /* HomeViewModel.swift in Sources */,
 				2F472BCF28AD17550061899A /* HomeView.swift in Sources */,
 				2F472BCB28ACE33A0061899A /* FollowView.swift in Sources */,
 				2F97F02D28B395DE0098380F /* ProfileCreationView.swift in Sources */,
 				2FC89E7828AB724500BCB64A /* SearchView.swift in Sources */,
 				2F472BD828AD2D690061899A /* PhotosView.swift in Sources */,
 				2F472BD228AD2C030061899A /* ProfileTopView.swift in Sources */,
+				2F2EEDBE28B8F76A001C8F7F /* PostView.swift in Sources */,
 				2FEDF6F128A67117000EB132 /* ContainerView.swift in Sources */,
 				2F8CBB4E28A518EC00B6C329 /* ProfileView.swift in Sources */,
 				2FF803D928A41EEA000B2B54 /* ContentView.swift in Sources */,
 				2F2EEDBC28B8B553001C8F7F /* ProfilePostsView.swift in Sources */,
 				2F2C35E928AA422600F708D1 /* ProfileViewModel.swift in Sources */,
+				2F2EEDC228B8F828001C8F7F /* ProfileCreationViewModel.swift in Sources */,
 				2F97F02928B38E250098380F /* ImagePickerViewModel.swift in Sources */,
 				2FA1D68028AA26690067FB5C /* ImagePicker.swift in Sources */,
 				2F2C35E728AA417A00F708D1 /* AuthViewModel.swift in Sources */,
+				2F2EEDC428B8F8A6001C8F7F /* SearchViewModel.swift in Sources */,
 				2FA1D68228AA26850067FB5C /* ImagePickerView.swift in Sources */,
 				2F630D8028B754EB00F38F10 /* Models.swift in Sources */,
 				2F472BD628AD2C9C0061899A /* ProfilePhotosView.swift in Sources */,

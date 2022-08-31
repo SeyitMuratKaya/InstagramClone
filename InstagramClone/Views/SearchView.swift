@@ -7,58 +7,51 @@
 
 import SwiftUI
 
-struct SearchModel:Identifiable{
-    var id: String { userID }
-    let userID: String
-    let value: [String]
-}
-
-class SearchViewModel: ObservableObject{
-    @Published var users = [SearchModel]()
-    @Published var searchText: String = ""
-    
-    func searchUsers(searchedUser:String){
-        FirebaseManager.shared.firestore.collection("users").getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                self.users.removeAll()
-                
-                for document in querySnapshot!.documents {
-                    self.users.append(SearchModel(userID: document.documentID, value: [document.data()["username"] as? String ?? "",document.data()["profilePicture"] as? String ?? ""]))
-                }
-                
-                self.users = self.users.filter({$0.value[0].contains(searchedUser)})
-            }
-        }
-    }
-}
-
 struct SearchView: View {
     @ObservedObject var viewModel = SearchViewModel()
     
     var body: some View {
         NavigationView{
-            Form{
-                Section{
+            VStack{
+                VStack{
                     TextField("Search",text: $viewModel.searchText)
+                        .padding()
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(15)
                         .textInputAutocapitalization(.never)
                 }
-                Section{
-                    List{
-                        ForEach(viewModel.users){ user in
-                            NavigationLink(destination: ProfileView(profileType: .others, userId: user.userID)) {
-                                HStack{
-                                    AsyncImage(url: URL(string: user.value[1])) { image in
-                                        image
-                                            .resizable()
+                .padding([.leading,.trailing,.top])
+                Divider()
+                ScrollView{
+                    ForEach(viewModel.users){ user in
+                        NavigationLink(destination: ProfileView(profileType: .others, userId: user.userID)) {
+                            HStack{
+                                AsyncImage(url: URL(string: user.value[1])) { image in
+                                    image
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                } placeholder: {
+                                    ZStack{
+                                        Color.gray
                                             .frame(width: 50, height: 50)
-                                    } placeholder: {
+                                            .clipShape(Circle())
                                         ProgressView()
+                                            .frame(width: 50, height: 50)
                                     }
-                                    Text(user.value[0])
                                 }
+                                VStack(alignment:.leading){
+                                    Text(user.value[0])
+                                        .foregroundColor(.black)
+                                        .font(.headline)
+                                    Text("Name")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                }
+                                .padding(.leading)
+                                Spacer()
                             }
+                            .padding()
                         }
                     }
                 }
