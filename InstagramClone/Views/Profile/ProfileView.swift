@@ -18,7 +18,7 @@ struct ProfileView: View {
     var userId = ""
     let profileType:ProfileType
     
-    init(profileType:ProfileType,userId:String = "",followers:[FollowModel] = [],followings:[FollowModel] = []){
+    init(profileType:ProfileType,userId:String = ""){
         self.userId = userId
         self.profileType = profileType
         self.viewModel = ProfileViewModel(profileType: profileType,userId: userId)
@@ -53,7 +53,10 @@ struct ProfileView: View {
         }
         .onChange(of: viewModel.inputImage){ _ in viewModel.updateProfilePicture()}
         .fullScreenCover(isPresented: $viewModel.showFollowSheet) {
-            FollowView(followPicker: $viewModel.followSheetPickerValue, viewModel: viewModel)
+            FollowView(followPicker: $viewModel.followSheetPickerValue,followers: viewModel.followers,followings: viewModel.followings)
+                .onAppear{
+                    viewModel.chooseUserToFetchFollows()
+                }
         }
         .fullScreenCover(isPresented: $viewModel.showProfilePhotos){
             ProfilePostsView(viewModel: viewModel)
@@ -69,6 +72,7 @@ struct ProfileView: View {
                 print("user disappeared")
             case .others:
                 print("others disappeared")
+                viewModel.saveFollow()
             }
         }
     }

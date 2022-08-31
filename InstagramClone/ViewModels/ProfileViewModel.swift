@@ -72,53 +72,57 @@ class ProfileViewModel: ObservableObject{
         }
     }
     
+    func saveFollow(){
+        if followStatus {
+            guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+            FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
+                "followings": FieldValue.arrayUnion([userId])
+            ]) { err in
+                if let err = err {
+                    print("(follow) Error updating document: \(err)")
+                } else {
+                    print("(follow) Document successfully updated")
+                }
+            }
+            
+            FirebaseManager.shared.firestore.collection("users").document(userId).updateData([
+                "followers": FieldValue.arrayUnion([uid])
+            ]) { err in
+                if let err = err {
+                    print("(follow) Error updating document: \(err)")
+                } else {
+                    print("(follow) Document successfully updated")
+                }
+            }
+        }else {
+            guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+            FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
+                "followings": FieldValue.arrayRemove([userId])
+            ]) { err in
+                if let err = err {
+                    print("(unfollow) Error updating document: \(err)")
+                } else {
+                    print("(unfollow) Document successfully updated")
+                }
+            }
+            
+            FirebaseManager.shared.firestore.collection("users").document(userId).updateData([
+                "followers": FieldValue.arrayRemove([uid])
+            ]) { err in
+                if let err = err {
+                    print("(unfollow) Error updating document: \(err)")
+                } else {
+                    print("(unfollow) Document successfully updated")
+                }
+            }
+        }
+    }
+    
     func follow(){
-        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
-        FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "followings": FieldValue.arrayUnion([userId])
-        ]) { err in
-            if let err = err {
-                print("(follow) Error updating document: \(err)")
-            } else {
-                print("(follow) Document successfully updated")
-            }
-        }
-        
-        FirebaseManager.shared.firestore.collection("users").document(userId).updateData([
-            "followers": FieldValue.arrayUnion([uid])
-        ]) { err in
-            if let err = err {
-                print("(follow) Error updating document: \(err)")
-            } else {
-                print("(follow) Document successfully updated")
-            }
-        }
-        
         self.followStatus = true
     }
     
     func unfollow(){
-        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
-        FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "followings": FieldValue.arrayRemove([userId])
-        ]) { err in
-            if let err = err {
-                print("(unfollow) Error updating document: \(err)")
-            } else {
-                print("(unfollow) Document successfully updated")
-            }
-        }
-        
-        FirebaseManager.shared.firestore.collection("users").document(userId).updateData([
-            "followers": FieldValue.arrayRemove([uid])
-        ]) { err in
-            if let err = err {
-                print("(unfollow) Error updating document: \(err)")
-            } else {
-                print("(unfollow) Document successfully updated")
-            }
-        }
-        
         self.followStatus = false
     }
     

@@ -11,7 +11,8 @@ struct FollowView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var followPicker:Int
     
-    @ObservedObject var viewModel: ProfileViewModel
+    var followers: [FollowModel] = []
+    var followings: [FollowModel] = []
         
     var body: some View {
         NavigationView{
@@ -27,8 +28,8 @@ struct FollowView: View {
                 .padding()
                 TabView(selection: $followPicker) {
                     List{
-                        ForEach(viewModel.followers){ follower in
-                            NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid,followers: viewModel.followers,followings: viewModel.followings)) {
+                        ForEach(followers){ follower in
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid)) {
                                 Text(follower.userName)
                             }
                         }
@@ -36,8 +37,8 @@ struct FollowView: View {
                     .listStyle(.plain)
                     .tag(0)
                     List{
-                        ForEach(viewModel.followings){ following in
-                            NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid,followers: viewModel.followers,followings: viewModel.followings)) {
+                        ForEach(followings){ following in
+                            NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid)) {
                                 Text(following.userName)
                             }
                         }
@@ -49,15 +50,12 @@ struct FollowView: View {
             }
             .navigationBarHidden(true)
         }
-        .onAppear{
-            viewModel.chooseUserToFetchFollows()
-        }
         
     }
 }
 
 struct FollowView_Previews: PreviewProvider {
     static var previews: some View {
-        FollowView(followPicker: .constant(0), viewModel: ProfileViewModel(profileType: .user))
+        FollowView(followPicker: .constant(0))
     }
 }
