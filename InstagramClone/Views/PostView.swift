@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct PostView: View {
+    @StateObject var viewModel = PostViewModel()
     var post: PostModel
+    var index: Int
     var body: some View {
         VStack{
             HStack{
@@ -57,25 +61,32 @@ struct PostView: View {
             HStack{
                 Group{
                     Button{
+                        viewModel.likeStatus.toggle()
+                        viewModel.likePost(post: post)
                     }label: {
-                        Image(systemName: "heart")
+                        Image(systemName: viewModel.likeStatus ? "heart.fill" : "heart")
                             .padding(.leading,10)
+                            .foregroundColor(viewModel.likeStatus ? .red : .black)
                     }
                     Button{
+                        viewModel.showCommentsSheet.toggle()
                     }label: {
                         Image(systemName: "bubble.right")
                             .padding(.leading,10)
+                            .foregroundColor(.black)
                     }
                     Button{
                     }label: {
                         Image(systemName: "paperplane")
                             .padding(.leading,10)
+                            .foregroundColor(.black)
                     }
                     Spacer()
                     Button{
                     }label: {
                         Image(systemName: "bookmark")
                             .padding(.trailing,10)
+                            .foregroundColor(.black)
                     }
                 }
                 .font(.system(size: 20))
@@ -83,7 +94,8 @@ struct PostView: View {
             .padding([.top,.bottom],5)
             Group{
                 HStack{
-                    Text("like count")
+                    Text("\(viewModel.likes.count) likes")
+                        .bold()
                     Spacer()
                 }
                 HStack{
@@ -91,7 +103,7 @@ struct PostView: View {
                     Spacer()
                 }
                 HStack{
-                    Text(post.timestamp)
+                    Text("\(post.timestamp)")
                         .font(.caption)
                         .foregroundColor(Color.gray)
                     Spacer()
@@ -99,11 +111,18 @@ struct PostView: View {
             }
             .padding(.leading,10)
         }
+        .onAppear{
+            viewModel.isLiked(post: post)
+            viewModel.listenPost(documentId: post.documentId)
+        }
+        .fullScreenCover(isPresented: $viewModel.showCommentsSheet) {
+            CommentsView(comments: viewModel.comments,documentId: post.documentId,ownerUsername: post.username,postDescription: post.detailText,profilePicture: post.profilePicture)
+        }
     }
 }
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView(post: PostModel(url: "", uid: "", timestamp: "", username: "", profilePicture: "", detailText: ""))
+        PostView(post: PostModel(url: "", uid: "", documentId: "", timestamp: "", username: "", profilePicture: "", detailText: "", likes: []), index: 0)
     }
 }

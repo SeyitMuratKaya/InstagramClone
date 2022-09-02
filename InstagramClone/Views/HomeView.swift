@@ -13,8 +13,8 @@ struct HomeView: View {
     var body: some View {
         ScrollView{
             Text("Homepage")
-            ForEach(viewModel.posts){ post in
-                PostView(post: post)
+            ForEach(Array(viewModel.posts.enumerated()),id: \.element){ index, post in
+                PostView(post: post,index:index)
             }
         }
     }

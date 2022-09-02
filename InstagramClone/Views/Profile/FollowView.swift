@@ -27,23 +27,61 @@ struct FollowView: View {
                 }
                 .padding()
                 TabView(selection: $followPicker) {
-                    List{
+                    ScrollView{
                         ForEach(followers){ follower in
                             NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid)) {
-                                Text(follower.userName)
+                                HStack{
+                                    AsyncImage(url: URL(string: follower.profilePicture)) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable()
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        } else if phase.error != nil {
+                                            Color.red
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        } else {
+                                            Color.blue
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                                    Text(follower.userName)
+                                    Spacer()
+                                }
+                                .padding([.horizontal])
                             }
                         }
                     }
-                    .listStyle(.plain)
                     .tag(0)
-                    List{
+                    ScrollView{
                         ForEach(followings){ following in
                             NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid)) {
-                                Text(following.userName)
+                                HStack{
+                                    AsyncImage(url: URL(string: following.profilePicture)) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable()
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        } else if phase.error != nil {
+                                            Color.red
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        } else {
+                                            Color.blue
+                                                .frame(width: 40, height: 40)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                                    Text(following.userName)
+                                    Spacer()
+                                }
+                                .padding([.horizontal])
                             }
                         }
                     }
-                    .listStyle(.plain)
                     .tag(1)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))

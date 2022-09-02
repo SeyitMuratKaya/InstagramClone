@@ -12,7 +12,7 @@ struct PhotosView: View {
     
     let columns: [GridItem] = Array(repeating: .init(.flexible(),spacing:1), count: 3)
     
-    var imageURLs: [ImageModel] = []
+    var imageURLs: [String] = []
     @Binding var showProfilePhotos: Bool
     @Binding var postIndex: Int
     var body: some View {
@@ -24,7 +24,7 @@ struct PhotosView: View {
                             showProfilePhotos.toggle()
                             postIndex = index
                         }label: {
-                            AsyncImage(url: URL(string: imageURL.url)) { phase in
+                            AsyncImage(url: URL(string: imageURL)) { phase in
                                 if let image = phase.image{
                                     VStack {
                                         image

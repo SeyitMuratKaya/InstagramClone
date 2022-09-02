@@ -29,6 +29,7 @@ class ProfileViewModel: ObservableObject{
     
     @Published var userProfile = ProfileModel(username: "", detail: "", profilePicture: "", followers: [], followings: [], images: [])
     @Published var posts: [PostModel] = []
+    @Published var images: [String] = []
     @Published var postIndex: Int = 0
     
     var userId = ""
@@ -62,14 +63,40 @@ class ProfileViewModel: ObservableObject{
             }
             print("(updateProfile) user profile updated")
             self.posts.removeAll()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/YY"
-            
-            for image in self.userProfile.images{
-                self.posts.append(PostModel(url: image.url, uid:uid, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture, detailText: image.detailText))
-            }
-            
+            self.findImages(ownerUid: uid)
         }
+    }
+    
+    func findImages(ownerUid:String){
+        self.images.removeAll()
+        FirebaseManager.shared.firestore.collection("images").whereField("owner", isEqualTo: ownerUid)
+            .getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        self.images.append(document.data()["url"] as? String ?? "")
+                        
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd/MM/YY"
+                        var dateString:String = "asdf"
+                        if let timestamp = document.data()["timestamp"] as? Timestamp {
+                            let date = timestamp.dateValue()
+                            dateString = dateFormatter.string(from: date)
+                        }
+                        
+                        self.posts.append(PostModel(url: document.data()["url"] as? String ?? "",
+                                                    uid: document.data()["owner"] as? String ?? "",
+                                                    documentId: document.documentID,
+                                                    timestamp: dateString,
+                                                    username: self.userProfile.username,
+                                                    profilePicture: self.userProfile.profilePicture,
+                                                    detailText: document.data()["detailText"] as? String ?? "",
+                                                    likes: document.data()["likes"] as? [String] ?? []))
+                    }
+                    
+                }
+            }
     }
     
     func saveFollow(){
@@ -198,11 +225,7 @@ class ProfileViewModel: ObservableObject{
                 print("Error decoding user profile: \(error)")
             }
             self.posts.removeAll()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/YY"
-            for image in self.userProfile.images{
-                self.posts.append(PostModel(url: image.url, uid: self.userId, timestamp: dateFormatter.string(from: image.timestamp), username: self.userProfile.username, profilePicture: self.userProfile.profilePicture, detailText: image.detailText))
-            }
+            self.findImages(ownerUid: userId)
         }
     }
     
@@ -250,7 +273,8 @@ class ProfileViewModel: ObservableObject{
                 if let document = document, document.exists {
                     let data = document.data()
                     let userName = data?["username"] as? String ?? ""
-                    type ? self.followers.append(FollowModel(uid: uid, userName: userName)) : self.followings.append(FollowModel(uid: uid, userName: userName))
+                    let profilePicture = data?["profilePicture"] as? String ?? ""
+                    type ? self.followers.append(FollowModel(uid: uid, userName: userName,profilePicture: profilePicture)) : self.followings.append(FollowModel(uid: uid, userName: userName,profilePicture: profilePicture))
                 } else {
                     print("Document does not exist")
                 }

@@ -17,7 +17,7 @@ struct ProfilePhotosView: View {
             }
             .pickerStyle(.segmented)
             TabView(selection: $viewModel.profileSelection){
-                PhotosView(imageURLs: viewModel.userProfile.images,showProfilePhotos: $viewModel.showProfilePhotos, postIndex: $viewModel.postIndex)
+                PhotosView(imageURLs: viewModel.images,showProfilePhotos: $viewModel.showProfilePhotos, postIndex: $viewModel.postIndex)
                     .tag(0)
                 Text("Placeholder")
                     .tag(1)

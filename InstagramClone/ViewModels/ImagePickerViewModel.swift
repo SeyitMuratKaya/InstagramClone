@@ -43,21 +43,41 @@ class ImagePickerViewModel: ObservableObject{
                     print("url download error")
                     return
                 }
-                self.saveImageToProfile(url: downloadUrl.absoluteString)
+                self.saveImage(url: downloadUrl.absoluteString)
             }
         }
     }
     
-    func saveImageToProfile(url:String){
+    func saveImageToProfile(imageId:String){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
         FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
-            "images": FieldValue.arrayUnion([["timestamp": Date(), "url": url,"detailText":self.detailText]])
+            "images": FieldValue.arrayUnion([imageId])
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
             } else {
                 print("Document successfully updated")
                 self.imageUploadProgressStatus = false
+            }
+        }
+    }
+    
+    func saveImage(url:String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+        let imageID = UUID().uuidString
+        FirebaseManager.shared.firestore.collection("images").document(imageID).setData([
+            "owner": uid,
+            "timestamp": Date(),
+            "likes":[],
+            "comments":[],
+            "detailText": "",
+            "url": url
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                self.saveImageToProfile(imageId: imageID)
             }
         }
     }

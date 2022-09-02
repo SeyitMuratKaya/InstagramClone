@@ -22,7 +22,7 @@ struct ProfilePostsView: View {
             ScrollViewReader{ scrollview in
                 ScrollView{
                     ForEach(Array(viewModel.posts.enumerated()).reversed(),id:\.element){ index, post in
-                        PostView(post: post)
+                        PostView(post: post,index: index)
                     }
                 }
                 .onAppear{
