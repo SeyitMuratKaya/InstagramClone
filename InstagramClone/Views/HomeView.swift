@@ -13,8 +13,11 @@ struct HomeView: View {
     var body: some View {
         ScrollView{
             Text("Homepage")
+                .onTapGesture {
+                    viewModel.refreshFollowings()
+                }
             ForEach(Array(viewModel.posts.enumerated()),id: \.element){ index, post in
-                PostView(post: post,index:index)
+                PostView(post: post,index:index,profileType: .others)
             }
         }
     }

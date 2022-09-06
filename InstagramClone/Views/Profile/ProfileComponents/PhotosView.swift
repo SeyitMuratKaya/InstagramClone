@@ -12,19 +12,19 @@ struct PhotosView: View {
     
     let columns: [GridItem] = Array(repeating: .init(.flexible(),spacing:1), count: 3)
     
-    var imageURLs: [String] = []
+    var imageURLs: [ProfileImage] = []
     @Binding var showProfilePhotos: Bool
     @Binding var postIndex: Int
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns,spacing: 1) {
-                ForEach(Array(imageURLs.enumerated()).reversed(),id:\.element) {index, imageURL in
+                ForEach(Array(imageURLs.enumerated()),id:\.element) {index, imageURL in
                     GeometryReader{ gr in
                         Button{
                             showProfilePhotos.toggle()
                             postIndex = index
                         }label: {
-                            AsyncImage(url: URL(string: imageURL)) { phase in
+                            AsyncImage(url: URL(string: imageURL.url)) { phase in
                                 if let image = phase.image{
                                     VStack {
                                         image

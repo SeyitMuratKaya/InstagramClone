@@ -27,7 +27,7 @@ struct FollowView: View {
                 }
                 .padding()
                 TabView(selection: $followPicker) {
-                    ScrollView{
+                    List{
                         ForEach(followers){ follower in
                             NavigationLink(destination: ProfileView(profileType: .others,userId: follower.uid)) {
                                 HStack{
@@ -42,20 +42,21 @@ struct FollowView: View {
                                                 .frame(width: 40, height: 40)
                                                 .clipShape(Circle())
                                         } else {
-                                            Color.blue
+                                            ProgressView()
                                                 .frame(width: 40, height: 40)
-                                                .clipShape(Circle())
                                         }
                                     }
                                     Text(follower.userName)
+                                        .foregroundColor(.black)
                                     Spacer()
                                 }
                                 .padding([.horizontal])
                             }
                         }
                     }
+                    .listStyle(.plain)
                     .tag(0)
-                    ScrollView{
+                    List{
                         ForEach(followings){ following in
                             NavigationLink(destination: ProfileView(profileType: .others,userId: following.uid)) {
                                 HStack{
@@ -70,18 +71,19 @@ struct FollowView: View {
                                                 .frame(width: 40, height: 40)
                                                 .clipShape(Circle())
                                         } else {
-                                            Color.blue
+                                            ProgressView()
                                                 .frame(width: 40, height: 40)
-                                                .clipShape(Circle())
                                         }
                                     }
                                     Text(following.userName)
+                                        .foregroundColor(.black)
                                     Spacer()
                                 }
                                 .padding([.horizontal])
                             }
                         }
                     }
+                    .listStyle(.plain)
                     .tag(1)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))

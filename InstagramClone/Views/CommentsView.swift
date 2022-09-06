@@ -12,7 +12,7 @@ import FirebaseFirestoreSwift
 struct CommentsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var commentText = ""
-    @State var comments: [Comment] = []
+    var comments: [Comment] = []
     var documentId: String = ""
     var ownerUsername: String = ""
     var postDescription: String = ""

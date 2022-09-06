@@ -10,14 +10,21 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+struct ProfileImage:Identifiable,Hashable{
+    var id: String { url }
+    var url: String
+    var timestamp: String
+}
+
 class ProfileViewModel: ObservableObject{
     @Published var profileSelection = 0
     @Published var showSettingsSheet = false
     @Published var showFollowSheet = false
     @Published var followSheetPickerValue = 0
     @Published var showImagePickerSheet = false
-    @Published var showPicturePicker = false
+    @Published var showProfilePicturePicker = false
     @Published var showProfilePhotos = false
+    @Published var showProfileDetailEditSheet = false
     
     @Published var followers: [FollowModel] = []
     @Published var followings: [FollowModel] = []
@@ -29,8 +36,9 @@ class ProfileViewModel: ObservableObject{
     
     @Published var userProfile = ProfileModel(username: "", detail: "", profilePicture: "", followers: [], followings: [], images: [])
     @Published var posts: [PostModel] = []
-    @Published var images: [String] = []
+    @Published var images: [ProfileImage] = []
     @Published var postIndex: Int = 0
+    @Published var detailText: String = ""
     
     var userId = ""
     var profileType = ProfileType.user
@@ -75,16 +83,16 @@ class ProfileViewModel: ObservableObject{
                     print("Error getting documents: \(err)")
                 } else {
                     for document in querySnapshot!.documents {
-                        self.images.append(document.data()["url"] as? String ?? "")
                         
                         let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "dd/MM/YY"
+                        dateFormatter.dateFormat = "dd/MM/YY HH:mm:ss"
                         var dateString:String = "asdf"
                         if let timestamp = document.data()["timestamp"] as? Timestamp {
                             let date = timestamp.dateValue()
                             dateString = dateFormatter.string(from: date)
                         }
                         
+                        self.images.append(ProfileImage(url: document.data()["url"] as? String ?? "", timestamp: dateString))
                         self.posts.append(PostModel(url: document.data()["url"] as? String ?? "",
                                                     uid: document.data()["owner"] as? String ?? "",
                                                     documentId: document.documentID,
@@ -96,6 +104,8 @@ class ProfileViewModel: ObservableObject{
                     }
                     
                 }
+                self.images = self.images.sorted(by: {$0.timestamp > $1.timestamp})
+                self.posts = self.posts.sorted(by: {$0.timestamp > $1.timestamp})
             }
     }
     
@@ -205,6 +215,20 @@ class ProfileViewModel: ObservableObject{
                 print("Error updating document: \(err)")
             } else {
                 print("Document successfully updated")
+            }
+        }
+    }
+    
+    func saveProfileDetail(){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+        FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
+            "detail" : self.detailText
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+                self.showProfileDetailEditSheet.toggle()
             }
         }
     }

@@ -60,6 +60,28 @@ class PostViewModel:ObservableObject{
         
     }
     
+    func deletePost(documentId: String){
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+        FirebaseManager.shared.firestore.collection("users").document(uid).updateData([
+            "images" : FieldValue.arrayRemove([documentId])
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+        
+        FirebaseManager.shared.firestore.collection("images").document(documentId).delete(){ err in
+            if let err = err {
+                    print("Error removing document: \(err)")
+                } else {
+                    print("Document successfully removed!")
+                }
+        }
+        
+    }
+    
     func isLiked(post:PostModel){
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
         

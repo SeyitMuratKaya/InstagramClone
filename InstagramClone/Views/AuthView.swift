@@ -46,13 +46,26 @@ struct AuthView: View {
                         }
                     }
                 }
-                SecureField("Password",text: $authViewModel.password)
-                    .padding()
-                    .textInputAutocapitalization(.never)
-                    .overlay{
-                        RoundedRectangle(cornerRadius: 5)
-                            .strokeBorder(.gray,lineWidth: 1)
+                VStack{
+                    SecureField("Password",text: $authViewModel.password)
+                        .padding()
+                        .textInputAutocapitalization(.never)
+                        .overlay{
+                            RoundedRectangle(cornerRadius: 5)
+                                .strokeBorder(.gray,lineWidth: 1)
+                        }
+                    if !authViewModel.loginStatus{
+                        HStack{
+                            Spacer()
+                            Text("incorrect password or email")
+                                .bold()
+                                .padding([.trailing])
+                                .font(.subheadline)
+                                .foregroundColor(.red)
+                        }
                     }
+
+                }
             }
             HStack{
                 Spacer()

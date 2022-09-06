@@ -14,7 +14,7 @@ struct ProfileDetailView: View {
             HStack{
                 Button{
                     if viewModel.profileType == .user{
-                        viewModel.showPicturePicker.toggle()
+                        viewModel.showProfilePicturePicker.toggle()
                     }
                 }label: {
                     AsyncImage(url: URL(string: viewModel.userProfile.profilePicture)){ phase in
@@ -117,6 +117,11 @@ struct ProfileDetailView: View {
                     Spacer()
                 }
                 Text(viewModel.userProfile.detail)
+                    .onLongPressGesture {
+                        if viewModel.profileType == .user {
+                            viewModel.showProfileDetailEditSheet.toggle()
+                        }
+                    }
             }
             .padding()
             .frame(maxWidth:.infinity)

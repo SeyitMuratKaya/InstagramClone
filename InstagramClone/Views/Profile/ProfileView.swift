@@ -39,16 +39,12 @@ struct ProfileView: View {
                     catch { print("already logged out") }
                     viewRouter.currentPage = .authView
                 }
-                Button("Edit Bio"){
-                    
-                }
-                
             }
         }
         .sheet(isPresented: $viewModel.showImagePickerSheet){
             ImagePickerView()
         }
-        .sheet(isPresented: $viewModel.showPicturePicker) {
+        .sheet(isPresented: $viewModel.showProfilePicturePicker) {
             ImagePicker(image: $viewModel.inputImage)
         }
         .onChange(of: viewModel.inputImage){ _ in viewModel.updateProfilePicture()}
@@ -60,6 +56,19 @@ struct ProfileView: View {
         }
         .fullScreenCover(isPresented: $viewModel.showProfilePhotos){
             ProfilePostsView(viewModel: viewModel)
+        }
+        .sheet(isPresented: $viewModel.showProfileDetailEditSheet){
+            List{
+                TextEditor(text: $viewModel.detailText)
+                    .onAppear {
+                        viewModel.detailText = viewModel.userProfile.detail
+                    }
+                Button{
+                    viewModel.saveProfileDetail()
+                }label: {
+                    Text("Save")
+                }
+            }
         }
         .onAppear{
             if profileType == .others{

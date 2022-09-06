@@ -13,6 +13,7 @@ struct PostView: View {
     @StateObject var viewModel = PostViewModel()
     var post: PostModel
     var index: Int
+    var profileType: ProfileType
     var body: some View {
         VStack{
             HStack{
@@ -35,9 +36,19 @@ struct PostView: View {
                 .frame(width: 35, height: 35)
                 Text(post.username)
                 Spacer()
-                Button{
-                    
-                }label: {
+                Menu {
+                    switch profileType {
+                    case .user:
+                        Button(role:.destructive){
+                            viewModel.deletePost(documentId: post.documentId)
+                        }label: {
+                            Text("Delete Post")
+                                .foregroundColor(.red)
+                        }
+                    case .others:
+                        EmptyView()
+                    }
+                } label: {
                     Image(systemName: "chevron.down")
                 }
             }
@@ -123,6 +134,6 @@ struct PostView: View {
 
 struct PostView_Previews: PreviewProvider {
     static var previews: some View {
-        PostView(post: PostModel(url: "", uid: "", documentId: "", timestamp: "", username: "", profilePicture: "", detailText: "", likes: []), index: 0)
+        PostView(post: PostModel(url: "", uid: "", documentId: "", timestamp: "", username: "", profilePicture: "", detailText: "", likes: []), index: 0, profileType: .user)
     }
 }

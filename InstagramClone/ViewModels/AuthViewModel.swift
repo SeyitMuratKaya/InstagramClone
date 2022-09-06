@@ -8,10 +8,11 @@
 import Foundation
 
 class AuthViewModel: ObservableObject{
-    @Published var email = "murat@gmail.com"
-    @Published var password = "123456"
+    @Published var email = ""
+    @Published var password = ""
     @Published var username = ""
     @Published var isNewUser = false
+    @Published var loginStatus = true
     
     var viewRouter: ViewRouter?
     
@@ -46,6 +47,8 @@ class AuthViewModel: ObservableObject{
         FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
             if let err = error{
                 print("failed to login \(err.localizedDescription)")
+                self.loginStatus = false
+                return
             }
             print("logged in")
             guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}

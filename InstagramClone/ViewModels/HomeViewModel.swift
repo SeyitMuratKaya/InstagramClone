@@ -41,6 +41,7 @@ class HomeViewModel: ObservableObject{
                                                 profilePicture: userProfile.profilePicture,
                                                 detailText: data?["detailText"] as? String ?? "",
                                                 likes: data?["likes"] as? [String] ?? []))
+                    self.posts = self.posts.sorted(by: {$0.timestamp > $1.timestamp})
                 } else {
                     print("Document does not exist")
                 }
@@ -63,6 +64,21 @@ class HomeViewModel: ObservableObject{
                 case .failure(let error):
                     print("Error decoding image: \(error)")
                 }
+            }
+            
+        }
+    }
+    
+    func refreshFollowings(){
+        self.followings.removeAll()
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { document, error in
+            if let document = document, document.exists {
+                self.followings = document.data()?["followings"] as? [String] ?? []
+                self.getPosts(uids: self.followings)
+            } else {
+                print("Document does not exist")
             }
             
         }
